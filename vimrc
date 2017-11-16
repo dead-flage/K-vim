@@ -30,6 +30,7 @@ let g:mapleader = ','
 
 " 开启语法高亮
 syntax on
+"clear red block
 
 " install bundles
 if filereadable(expand("~/.vimrc.bundles"))
@@ -99,13 +100,16 @@ set cursorline
 
 " 设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制, 不需要可以去掉
 " 好处：误删什么的，如果以前屏幕打开，可以找回
-set t_ti= t_te=
+"set t_ti= t_te=
 
-
+"当打开vim且没有文件时自动打开NERDTr 
+autocmd vimenter * if !argc() | NERDTree | endif
+"" 只剩 NERDTree时自动关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif  
 " 鼠标暂不启用, 键盘党....
-set mouse-=a
+"set mouse-=a
 " 启用鼠标
-" set mouse=a
+ set mouse=a
 " Hide the mouse cursor while typing
 " set mousehide
 
@@ -357,9 +361,9 @@ function! HideNumber()
   set number?
 endfunc
 nnoremap <F2> :call HideNumber()<CR>
-" F3 显示可打印字符开关
-nnoremap <F3> :set list! list?<CR>
-" F4 换行开关
+" F3 is Nerdtree
+map <F3> :NERDTreeToggle<CR>
+imap <F3> <ESC> :NERDTreeToggle<CR>
 nnoremap <F4> :set wrap! wrap?<CR>
 
 " F6 语法开关，关闭语法可以加快大文件的展示
@@ -620,7 +624,6 @@ if has("autocmd")
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
   endif
 endif
-
 "==========================================
 " TEMP 设置, 尚未确定要不要
 "==========================================
@@ -657,8 +660,8 @@ endif
 set background=dark
 set t_Co=256
 
-colorscheme solarized
-" colorscheme molokai
+"colorscheme solarized
+ colorscheme molokai
 
 
 " 设置标记一列的背景颜色和数字一行颜色一致
